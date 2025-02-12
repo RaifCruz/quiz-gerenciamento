@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Gerenciamento de Projetos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+            position: relative;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            background: #6941BF;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .option:hover {
+            background: #52329A;
+        }
+        .correct {
+            background: #28a745 !important;
+        }
+        .incorrect {
+            background: #dc3545 !important;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Quiz de Gerenciamento de Projetos</h2>
+        <div id="quiz"></div>
+        <button onclick="restartQuiz()">Reiniciar</button>
+        <p class="result" id="result"></p>
+    </div>
+    
+    <script>
+        const quizData = [
+            {
+                question: "Qual é a definição oficial de um projeto, segundo o PMBOK?",
+                options: [
+                    "Um conjunto de atividades contínuas que geram valor para a organização",
+                    "Um esforço temporário empreendido para criar um produto, serviço ou resultado único",
+                    "Um planejamento estratégico de longo prazo para alcançar objetivos organizacionais",
+                    "Um processo repetitivo que busca maximizar a eficiência da equipe"
+                ],
+                correct: 1
+            },
+            {
+                question: "Qual das opções abaixo NÃO é uma restrição clássica de um projeto?",
+                options: ["Escopo", "Tempo", "Qualidade", "Custo"],
+                correct: 2
+            },
+            {
+                question: "O que significa a sigla PMO?",
+                options: ["Project Management Office", "Process Management Organization", "Portfolio Management Operations", "Planning and Monitoring Office"],
+                correct: 0
+            },
+            {
+                question: "No método Ágil, qual cerimônia é responsável por revisar o que foi feito e definir melhorias para o próximo ciclo?",
+                options: ["Sprint Planning", "Daily Scrum", "Sprint Review", "Sprint Retrospective"],
+                correct: 3
+            },
+            {
+                question: "Qual dos seguintes documentos define formalmente a existência de um projeto?",
+                options: ["EAP (Estrutura Analítica do Projeto)", "Termo de Abertura do Projeto", "Cronograma do Projeto", "Matriz de Responsabilidades"],
+                correct: 1
+            }
+        ];
+
+        const quizContainer = document.getElementById("quiz");
+        const resultContainer = document.getElementById("result");
+        
+        function loadQuiz() {
+            quizContainer.innerHTML = "";
+            quizData.forEach((q, index) => {
+                const questionElement = document.createElement("div");
+                questionElement.classList.add("question");
+                questionElement.textContent = `${index + 1}. ${q.question}`;
+                quizContainer.appendChild(questionElement);
+                
+                const optionsContainer = document.createElement("div");
+                optionsContainer.classList.add("options");
+                
+                q.options.forEach((option, i) => {
+                    const optionElement = document.createElement("div");
+                    optionElement.classList.add("option");
+                    optionElement.textContent = option;
+                    optionElement.onclick = () => checkAnswer(optionElement, i, q.correct);
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                quizContainer.appendChild(optionsContainer);
+            });
+        }
+
+        function checkAnswer(element, selectedIndex, correctIndex) {
+            if (selectedIndex === correctIndex) {
+                element.classList.add("correct");
+            } else {
+                element.classList.add("incorrect");
+            }
+            disableOptions(element.parentElement);
+            updateResult();
+        }
+
+        function disableOptions(parent) {
+            Array.from(parent.children).forEach(child => {
+                child.onclick = null;
+            });
+        }
+
+        function updateResult() {
+            let correctAnswers = document.querySelectorAll(".correct").length;
+            if (correctAnswers <= 2) {
+                resultContainer.textContent = "✔ 0 a 2 acertos: Você está começando sua jornada no gerenciamento de projetos! Explore mais conteúdos sobre metodologias e boas práticas.";
+            } else if (correctAnswers <= 3) {
+                resultContainer.textContent = "✔ 2 a 3 acertos: Você tem um bom conhecimento! Ainda há espaço para aprofundar seu aprendizado.";
+            } else {
+                resultContainer.textContent = "✔ 3 a 5 acertos: Parabéns! Você é um expert em gerenciamento de projetos! 🎯";
+            }
+        }
+
+        function restartQuiz() {
+            loadQuiz();
+            resultContainer.textContent = "";
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>
